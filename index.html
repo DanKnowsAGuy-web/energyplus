@@ -195,32 +195,20 @@
     color: var(--amber-light);
   }
 
-  .cycle-wrapper {
-    display: inline-block;
-    position: relative;
-    /* Reserve height for the tallest word so layout never jumps */
-    min-width: 2px;
-  }
-
+  /* All words stack in one grid cell, so the box reserves the WIDEST word's
+     size and never reflows as it cycles. Crossfade is opacity-only (no motion),
+     so it is vestibular-safe and runs for reduced-motion users too. */
+  .cycle-wrapper { display: inline-grid; vertical-align: bottom; }
   .cycle-word {
-    display: inline-block;
-    position: absolute;
-    left: 0; top: 0;
+    grid-area: 1 / 1;
     white-space: nowrap;
     opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.45s ease, transform 0.45s ease;
-    pointer-events: none;
+    transition: opacity 0.5s var(--ease-out);
   }
-  .cycle-word.visible {
-    opacity: 1;
-    transform: translateY(0);
-    position: relative; /* takes up space when visible */
-  }
-  .cycle-word.exit {
-    opacity: 0;
-    transform: translateY(-14px);
-    position: absolute; /* exit out of flow */
+  .cycle-word.visible { opacity: 1; }
+  /* keep the crossfade smooth even under reduced-motion (opacity = no movement) */
+  @media (prefers-reduced-motion: reduce) {
+    .cycle-word { transition-duration: 0.5s !important; }
   }
 
   .hero-deck {
@@ -910,15 +898,16 @@
   <div class="hero-inner">
     <div class="eyebrow">Your Energy Partner</div>
 
-    <h1 aria-label="Most energy professionals sell one solution.">
+    <h1 aria-label="Most energy pros sell one solution.">
       <span class="hero-h1-line1" aria-hidden="true">Most</span>
       <span class="hero-h1-line2" aria-hidden="true">
         <span class="cycle-wrapper" id="cycleWrapper">
-          <span class="cycle-word visible">Solar Vendors</span>
-          <span class="cycle-word">HVAC Reps</span>
-          <span class="cycle-word">Lighting Contractors</span>
+          <span class="cycle-word visible">Energy Pros</span>
+          <span class="cycle-word">Solar Installers</span>
+          <span class="cycle-word">HVAC Techs</span>
+          <span class="cycle-word">Lighting Pros</span>
           <span class="cycle-word">Energy Brokers</span>
-          <span class="cycle-word">Efficiency Consultants</span>
+          <span class="cycle-word">Energy Consultants</span>
         </span>
       </span>
       <span class="hero-h1-line3" aria-hidden="true">sell one solution.</span>
@@ -1019,27 +1008,26 @@
       <p>Select the description that fits you most closely. Everything below this point is written specifically for you.</p>
     </div>
 
-    <div class="role-tabs stagger" role="tablist" aria-label="Choose your situation">
-      <button class="role-tab active" role="tab" id="tab-new" aria-controls="panel-new" aria-selected="true" data-role="new">I'm New to Energy Sales</button>
-      <button class="role-tab" role="tab" id="tab-specialist" aria-controls="panel-specialist" aria-selected="false" tabindex="-1" data-role="specialist">I Already Sell One Energy Solution</button>
-      <button class="role-tab" role="tab" id="tab-consultant" aria-controls="panel-consultant" aria-selected="false" tabindex="-1" data-role="consultant">I'm an Energy Consultant or Broker</button>
-      <button class="role-tab" role="tab" id="tab-inventor" aria-controls="panel-inventor" aria-selected="false" tabindex="-1" data-role="inventor">I Have a Technology or Innovation</button>
-      <button class="role-tab" role="tab" id="tab-investor" aria-controls="panel-investor" aria-selected="false" tabindex="-1" data-role="investor">I'm an Investor</button>
+    <div class="role-tabs stagger" role="tablist" aria-label="Choose what fits you">
+      <button class="role-tab active" role="tab" id="tab-solar" aria-controls="panel-solar" aria-selected="true" data-role="solar">Solar</button>
+      <button class="role-tab" role="tab" id="tab-hvac" aria-controls="panel-hvac" aria-selected="false" tabindex="-1" data-role="hvac">HVAC</button>
+      <button class="role-tab" role="tab" id="tab-consultant" aria-controls="panel-consultant" aria-selected="false" tabindex="-1" data-role="consultant">Efficiency Consultants</button>
+      <button class="role-tab" role="tab" id="tab-inventor" aria-controls="panel-inventor" aria-selected="false" tabindex="-1" data-role="inventor">Inventors</button>
+      <button class="role-tab" role="tab" id="tab-investor" aria-controls="panel-investor" aria-selected="false" tabindex="-1" data-role="investor">Investors</button>
+      <button class="role-tab" role="tab" id="tab-other" aria-controls="panel-other" aria-selected="false" tabindex="-1" data-role="other">Other Energy Pros</button>
     </div>
 
     <div class="role-panels">
 
-      <!-- NEW TO ENERGY SALES -->
-      <div class="role-panel active" data-panel="new" role="tabpanel" id="panel-new" aria-labelledby="tab-new" tabindex="0">
+      <!-- SOLAR -->
+      <div class="role-panel active" data-panel="solar" role="tabpanel" id="panel-solar" aria-labelledby="tab-solar" tabindex="0">
         <div class="role-panel-grid">
           <div class="rp-story">
             <div>
-              <span class="rp-story-icon">🚀</span>
-              <h2>You don't need a product.<br><em>You need a complete offer.</em></h2>
-              <p>Most people who want to enter energy sales spend months trying to find the right product, get licensed with a vendor, and figure out their pitch. By the time they're ready, momentum is gone.</p>
-              <p>The Energy+ model starts you differently. <strong>You bring the relationships and the willingness to have the conversation.</strong> We give you a full turnkey offer from day one: technology, financing, tax credit expertise, and implementation support already assembled behind you.</p>
-              <p class="philosophical">"It's wrong that getting into energy sales requires building infrastructure most people don't have access to. We built it. You just walk in."</p>
-              <p>Your first conversation with a prospect isn't about one product. It's about their entire energy situation. That's a more powerful conversation, and it's one almost nobody else in your market can have.</p>
+              <h2>You sell solar. The roof is where the deal starts,<br><em>not where it ends.</em></h2>
+              <p>You've earned the trust it takes to get on the roof. But the same client buying panels has aging HVAC, a lighting retrofit waiting, demand charges eating their bill, and tax credits no one is capturing for them.</p>
+              <p><strong>Right now those are someone else's deals.</strong> Energy+ wraps the full stack around what you already sell, so the next time solar opens the door you walk through it with everything behind you, including the financing and engineering to deliver.</p>
+              <p class="philosophical">"Your solar client has more energy problems than you're solving. That's a limit on your offer, not your skill."</p>
             </div>
             <div>
               <div class="gold-rule"></div>
@@ -1047,47 +1035,45 @@
             </div>
           </div>
           <div class="rp-what">
-            <h3>What Energy+ Gives You on Day One</h3>
+            <h3>What Gets Added to Your Solar Offer</h3>
             <ul class="upgrade-list">
-              <li><span class="check">+</span><div><strong>A complete offer, not a single product.</strong> Utility rate negotiation, HVAC optimization, power quality, LED, solar, storage, tax credits. You represent all of it.</div></li>
-              <li><span class="check">+</span><div><strong>Client financing already structured.</strong> Your clients don't need to write a check to say yes. Day-one cash-flow-positive financing removes the single biggest objection in energy sales.</div></li>
-              <li><span class="check">+</span><div><strong>Engineering and technical support.</strong> When a client asks a question you can't answer, you have a team of engineers behind you. You never have to say "I don't know."</div></li>
-              <li><span class="check">+</span><div><strong>Tax credit and incentive expertise.</strong> 179D deductions, 30% ITC, bonus depreciation. Most energy reps leave tens of thousands of dollars per deal in unclaimed incentives. You won't.</div></li>
-              <li><span class="check">+</span><div><strong>You earn on the whole deal.</strong> Not just one line item. The entire scope of what gets closed through you.</div></li>
+              <li><span class="check">+</span><div><strong>Client financing for every project.</strong> Day-one cash-flow-positive financing removes the biggest objection before the client raises it. One conversation funds the whole scope.</div></li>
+              <li><span class="check">+</span><div><strong>The full technology stack.</strong> Whatever the client needs beyond panels, you can now deliver it or coordinate it, and stay their single point of accountability.</div></li>
+              <li><span class="check">+</span><div><strong>Tax-credit maximization on every deal.</strong> 179D, 30% ITC, and bonus depreciation add thousands per client that most reps leave behind.</div></li>
+              <li><span class="check">+</span><div><strong>Engineering support behind you.</strong> 42 years of infrastructure engineering on call, so you never have to say "I don't know."</div></li>
+              <li><span class="check">+</span><div><strong>Commission on the entire deal.</strong> Not just the panels. The whole engagement you're now able to close.</div></li>
             </ul>
             <div class="rp-cta-block">
-              <div class="risk-line">We only earn when you close. Zero cost to start.</div>
+              <div class="risk-line">You keep your existing business. We add to it.</div>
               <a href="https://bit.ly/your-offer_" class="btn-primary" target="_blank" rel="noopener">Discover Your Offer</a>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SPECIALIST -->
-      <div class="role-panel" data-panel="specialist" role="tabpanel" id="panel-specialist" aria-labelledby="tab-specialist" tabindex="0">
+      <!-- HVAC -->
+      <div class="role-panel" data-panel="hvac" role="tabpanel" id="panel-hvac" aria-labelledby="tab-hvac" tabindex="0">
         <div class="role-panel-grid">
           <div class="rp-story">
             <div>
-              <span class="rp-story-icon">⚡</span>
-              <h2>You're already in the room.<br><em>You're leaving most of the deal behind.</em></h2>
-              <p>You sell solar. Or HVAC optimization. Or lighting retrofits. You're good at it and your clients trust you. But in every conversation, there are questions you can't answer and problems you can't solve.</p>
-              <p>The client asks about financing. You don't have a path. They ask about tax credits. You give a partial answer. They mention their HVAC system is aging. That's someone else's territory. <strong>Every one of those moments is revenue walking out the door.</strong></p>
-              <p class="philosophical">"Your clients have more energy problems than you currently solve. The ceiling is your offer, not your skill, and Energy+ raises it."</p>
-              <p>Energy+ doesn't ask you to change what you do. It wraps everything around what you already do, so the next time a client asks a question you couldn't answer before, you have a complete answer.</p>
+              <h2>You optimize HVAC.<br><em>The same building has nine other ways to save.</em></h2>
+              <p>They call you when the system is failing or the bills spike, the hardest trust to earn in this business, and you already have it.</p>
+              <p><strong>But power quality, lighting, storage, rate negotiation, and incentives are all sitting in that same building, unaddressed.</strong> Energy+ lets you answer every one of those in the same visit, without handing the relationship to anyone else. You stay the one they call.</p>
+              <p class="philosophical">"Your HVAC client has more energy problems than you're solving. That's a limit on your offer, not your skill."</p>
             </div>
             <div>
               <div class="gold-rule"></div>
-              <a href="#schedule" class="btn-primary">Expand Your Offer</a>
+              <a href="#schedule" class="btn-primary">Start the Conversation</a>
             </div>
           </div>
           <div class="rp-what">
-            <h3>What Gets Added to Your Existing Offer</h3>
+            <h3>What Gets Added to Your HVAC Offer</h3>
             <ul class="upgrade-list">
-              <li><span class="check">+</span><div><strong>Client financing for every project.</strong> Yours and every complementary solution. One financing conversation. One approval. The whole scope gets funded.</div></li>
-              <li><span class="check">+</span><div><strong>The full technology stack.</strong> Whatever your client needs beyond your core product, you can now deliver it or coordinate it. You become their single point of accountability.</div></li>
-              <li><span class="check">+</span><div><strong>Tax credit maximization on every deal.</strong> Add thousands per client in 179D, ITC, and depreciation value you're currently leaving behind.</div></li>
-              <li><span class="check">+</span><div><strong>Engineering support for complex questions.</strong> 42 years of infrastructure engineering experience available to back your conversations.</div></li>
-              <li><span class="check">+</span><div><strong>Commission on the entire expanded deal.</strong> Not just your product. The whole engagement you're now able to close.</div></li>
+              <li><span class="check">+</span><div><strong>Client financing for every project.</strong> Day-one cash-flow-positive financing removes the biggest objection before the client raises it. One conversation funds the whole scope.</div></li>
+              <li><span class="check">+</span><div><strong>The full technology stack.</strong> Whatever the client needs beyond the mechanical work, you can now deliver it or coordinate it, and stay their single point of accountability.</div></li>
+              <li><span class="check">+</span><div><strong>Tax-credit maximization on every deal.</strong> 179D, 30% ITC, and bonus depreciation add thousands per client that most reps leave behind.</div></li>
+              <li><span class="check">+</span><div><strong>Engineering support behind you.</strong> 42 years of infrastructure engineering on call, so you never have to say "I don't know."</div></li>
+              <li><span class="check">+</span><div><strong>Commission on the entire deal.</strong> Not just the HVAC line item. The whole engagement you're now able to close.</div></li>
             </ul>
             <div class="rp-cta-block">
               <div class="risk-line">You keep your existing business. We add to it.</div>
@@ -1193,6 +1179,38 @@
             <div class="rp-cta-block">
               <div class="risk-line">Speak directly with Daniel to begin due diligence.</div>
               <a href="#schedule" class="btn-primary">Begin the Conversation</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OTHER ENERGY PROS -->
+      <div class="role-panel" data-panel="other" role="tabpanel" id="panel-other" aria-labelledby="tab-other" tabindex="0">
+        <div class="role-panel-grid">
+          <div class="rp-story">
+            <div>
+              <h2>Whatever you sell,<br><em>it's probably one slice of a bigger deal.</em></h2>
+              <p>General contractor, energy auditor, facility manager, or a role we haven't named here: if you hold the relationship and you're solving one piece of a client's energy picture, the same math applies.</p>
+              <p><strong>The rest of the stack is revenue you're handing to someone else.</strong> Energy+ gives you the complete offer, the financing, and the team to close the whole thing, whatever your starting point.</p>
+              <p class="philosophical">"Whatever your one thing is, the client has nine others. That's a limit on your offer, not your skill."</p>
+            </div>
+            <div>
+              <div class="gold-rule"></div>
+              <a href="#schedule" class="btn-primary">Start the Conversation</a>
+            </div>
+          </div>
+          <div class="rp-what">
+            <h3>What Energy+ Adds to What You Already Do</h3>
+            <ul class="upgrade-list">
+              <li><span class="check">+</span><div><strong>Client financing for every project.</strong> Day-one cash-flow-positive financing removes the biggest objection before the client raises it. One conversation funds the whole scope.</div></li>
+              <li><span class="check">+</span><div><strong>The full technology stack.</strong> Whatever the client needs, you can now deliver it or coordinate it, and stay their single point of accountability.</div></li>
+              <li><span class="check">+</span><div><strong>Tax-credit maximization on every deal.</strong> 179D, 30% ITC, and bonus depreciation add thousands per client that most leave behind.</div></li>
+              <li><span class="check">+</span><div><strong>Engineering support behind you.</strong> 42 years of infrastructure engineering on call, so you never have to say "I don't know."</div></li>
+              <li><span class="check">+</span><div><strong>Commission on the entire deal.</strong> Not just your one piece. The whole engagement you're now able to close.</div></li>
+            </ul>
+            <div class="rp-cta-block">
+              <div class="risk-line">We only earn when you close. Zero cost to start.</div>
+              <a href="https://bit.ly/your-offer_" class="btn-primary" target="_blank" rel="noopener">Discover Your Offer</a>
             </div>
           </div>
         </div>
@@ -1471,37 +1489,27 @@
     revealEls.forEach(el => el.classList.add('on')); // no IO: show everything
   }
 
-  // ── Cycling Headline ──
+  // ── Cycling Headline (opacity crossfade: safe for reduced motion too) ──
   (function() {
     const wrapper = document.getElementById('cycleWrapper');
-    if (!wrapper || reduceMotion) return; // reduced motion: keep the first word static
+    if (!wrapper) return;
     const words = Array.from(wrapper.querySelectorAll('.cycle-word'));
-    let current = 0;
-    let timer = null;
+    if (words.length < 2) return;
+    let current = 0, paused = false;
 
     function next() {
+      if (paused || document.hidden) return;
       const prev = current;
       current = (current + 1) % words.length;
-
-      // Mark previous as exiting (animates up and out)
-      words[prev].classList.remove('visible');
-      words[prev].classList.add('exit');
-      words[prev].setAttribute('aria-hidden', 'true');
-
-      // After exit animation completes, clean up
-      setTimeout(() => {
-        words[prev].classList.remove('exit');
-      }, 480);
-
-      // Bring in new word
-      words[current].classList.add('visible');
-      words[current].removeAttribute('aria-hidden');
+      words[prev].classList.remove('visible');          // fade out
+      setTimeout(() => words[current].classList.add('visible'), 430); // then fade in (no overlap)
     }
 
-    // Start cycling after a brief pause so the page load animation settles
-    setTimeout(() => {
-      timer = setInterval(next, 2200);
-    }, 1800);
+    // Pause on hover/focus so anyone can stop to read (WCAG pause-stop-hide).
+    ['mouseenter', 'focusin'].forEach(e => wrapper.addEventListener(e, () => paused = true));
+    ['mouseleave', 'focusout'].forEach(e => wrapper.addEventListener(e, () => paused = false));
+
+    setTimeout(() => setInterval(next, 2700), 1800);
   })();
 
   // ── Role Tabs (ARIA tablist with roving tabindex + arrow keys) ──
