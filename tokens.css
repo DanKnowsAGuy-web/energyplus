@@ -1,0 +1,162 @@
+/* ============================================================
+   Energy+ Design System — portable tokens + primitives
+   Dark, premium, "engineered": deep navy + champagne + Spectral.
+   Pair with the Google Fonts link in the spec.
+   ============================================================ */
+
+:root {
+  /* ── surfaces (deep navy ramp) ── */
+  --navy:        #0a1622;   /* page background */
+  --navy-mid:    #0f1f2e;   /* alternating section bg */
+  --navy-light:  #16293b;   /* card hover / lift */
+  --navy-card:   #0c1a28;   /* card surface */
+  --navy-hero:   #122438;   /* hero gradient mid-stop */
+  --navy-deep:   #060f17;   /* footer / deepest */
+  --navy-rgb:    10,22,34;  /* for translucent fills */
+
+  /* ── accent (champagne, NOT yellow-gold) ── */
+  --amber:       #c2a368;   /* primary accent */
+  --amber-light: #d8bf8a;   /* links/text on dark, focus, hover */
+  --amber-pale:  #ead7ab;   /* italic pull-quotes */
+  --amber-rgb:   194,163,104;
+
+  /* ── text ── */
+  --white:  #fbfbf8;   /* headlines (~contrast vs navy: very high) */
+  --cream:  #e7e6e0;   /* body (~14:1) */
+  --mid:    #afc1cf;   /* leads (~9:1) */
+  --muted:  #8597a6;   /* supporting (~5.5:1) — do not go dimmer */
+
+  /* ── lines & status ── */
+  --border:     rgba(var(--amber-rgb),0.22);
+  --border-sub: rgba(255,255,255,0.06);
+  --green:      #57bf98;
+  --red:        #d6796d;
+
+  /* ── spacing & rhythm ── */
+  --gutter:        clamp(1.25rem, 0.7rem + 2.4vw, 3rem);
+  --maxw:          1200px;
+  --maxw-narrow:   880px;
+  --section:       clamp(4.75rem, 3rem + 6.5vw, 8.5rem);
+  --section-tight: clamp(3.5rem, 2.5rem + 3.5vw, 5.75rem);
+  --section-loose: clamp(6rem, 3.5rem + 9vw, 11rem);
+  --s-1:.25rem; --s-2:.5rem; --s-3:.75rem; --s-4:1rem;
+  --s-5:1.5rem; --s-6:2rem; --s-7:3rem; --s-8:4rem;
+
+  /* ── type scale (fluid display, fixed body) ── */
+  --font-display: 'Spectral', Georgia, serif;
+  --font-body:    'Barlow', system-ui, sans-serif;
+  --font-label:   'Barlow Condensed', system-ui, sans-serif;
+  --t-display: clamp(2.8rem, 1.5rem + 5.2vw, 5.25rem);
+  --t-h1:      clamp(2rem, 1.45rem + 2.5vw, 3.4rem);
+  --t-h2:      clamp(1.55rem, 1.15rem + 1.9vw, 2.6rem);
+  --t-h3:      clamp(1.25rem, 1.05rem + 0.95vw, 1.65rem);
+  --t-lead:    1.2rem;
+  --t-body:    1.0625rem;
+  --t-sm:      0.95rem;     /* never go below */
+  --t-label:   0.72rem;
+  --lh-tight:1.12; --lh-snug:1.32; --lh-body:1.65;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* the only curve */
+  --z-nav:100; --z-grain:120;
+}
+
+/* ── base ── */
+body {
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--cream);
+  background: var(--navy);
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: var(--lh-tight);
+  letter-spacing: -0.015em;
+  color: var(--white);
+  text-wrap: balance;
+}
+h1 { font-size: var(--t-display); }
+h2 { font-size: var(--t-h1); }
+h3 { font-size: var(--t-h2); }
+em { font-style: italic; color: var(--amber-light); }
+p  { text-wrap: pretty; max-width: 62ch; }
+
+/* champagne text selection */
+::selection { background: var(--amber); color: var(--navy); }
+
+/* visible keyboard focus on everything interactive (low specificity) */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--amber-light);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ── primitives ── */
+
+/* uppercase tracked label / eyebrow (use sparingly, NOT every section) */
+.label {
+  font-family: var(--font-label);
+  font-size: var(--t-label);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+/* primary button: champagne fill, dark text */
+.btn {
+  font-family: var(--font-label);
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.9rem 2rem; min-height: 44px;
+  background: var(--amber); color: var(--navy);
+  transition: background 0.2s, transform 0.15s var(--ease-out);
+}
+.btn:hover { background: var(--amber-light); transform: translateY(-2px); }
+.btn--ghost {
+  background: transparent; color: var(--amber-light);
+  border: 1px solid var(--border);
+}
+.btn--ghost:hover { background: rgba(var(--amber-rgb),0.07); border-color: var(--amber); }
+
+/* short champagne rule (above pull-quotes, beside labels) — never a side stripe */
+.rule { width: 2.4rem; height: 2px; background: var(--amber); }
+
+/* hairline-tiled grid: cards read as tiles separated by 1px lines */
+.tile-grid { display: grid; gap: 1.5px; background: var(--border-sub); }
+.tile      { background: var(--navy-card); }
+
+/* portrait treatment: grayscale by default, colorize on hover/focus */
+.photo {
+  width: 100%; object-fit: cover; display: block;
+  filter: grayscale(1) contrast(1.04) brightness(0.95);
+  transition: filter 0.45s var(--ease-out);
+}
+.tile:hover .photo, .tile:focus-within .photo { filter: none; }
+
+/* film grain overlay (add <div class="grain"></div> as last body child) */
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: var(--z-grain);
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* numerals align (stats, indices, steps) */
+.tnum { font-variant-numeric: tabular-nums lining-nums; }
+
+/* ── accessibility: mandatory reduced-motion guard ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
