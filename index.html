@@ -261,7 +261,7 @@
 
   .btn-primary {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.16em;
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--navy);
     background: var(--amber); padding: 0.95rem 2.2rem;
     text-decoration: none; display: inline-block;
@@ -273,13 +273,29 @@
   }
   .btn-ghost {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.16em;
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.14em;
     text-transform: uppercase; color: var(--amber-light);
     border: 1px solid rgba(var(--amber-rgb),0.38); padding: 0.95rem 2.2rem;
     text-decoration: none; display: inline-block;
     transition: all 0.2s;
   }
   .btn-ghost:hover { border-color: var(--amber); background: rgba(var(--amber-rgb),0.07); }
+
+  /* third hero CTA: wider, drops to its own line, drives to the offer tool */
+  .btn-offer {
+    flex-basis: 100%; max-width: 30rem;
+    display: inline-flex; align-items: center; justify-content: space-between; gap: 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--amber-light);
+    background: rgba(var(--amber-rgb),0.08);
+    border: 1px solid rgba(var(--amber-rgb),0.35);
+    padding: 1rem 1.6rem; text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s var(--ease-out);
+  }
+  .btn-offer::after { content: '\2192'; font-size: 1.15em; transition: transform 0.25s var(--ease-out); }
+  .btn-offer:hover { background: rgba(var(--amber-rgb),0.14); border-color: var(--amber); transform: translateY(-2px); }
+  .btn-offer:hover::after { transform: translateX(4px); }
 
   .hero-proof {
     position: absolute; right: var(--gutter); bottom: 5rem;
@@ -881,8 +897,7 @@
   <a href="#" class="nav-logo">ENERGY<span>+</span></a>
   <div class="nav-right">
     <a href="#offer" class="nav-link">What You Get</a>
-    <a href="#team" class="nav-link">The Team</a>
-    <a href="#schedule" class="nav-cta">Get in Touch</a>
+    <a href="#schedule" class="nav-cta">Let's Connect</a>
   </div>
 </nav>
 
@@ -931,7 +946,8 @@
     <div class="hero-risk">We only earn when you close. Zero upfront cost to partners.</div>
     <div class="hero-actions">
       <a href="#roles" class="btn-primary">Find Your Role</a>
-      <a href="#schedule" class="btn-ghost">Get in Touch</a>
+      <a href="#schedule" class="btn-ghost">Let's Connect</a>
+      <a href="https://bit.ly/your-offer_" class="btn-offer" target="_blank" rel="noopener">Discover What You Can Offer</a>
     </div>
   </div>
   <div class="hero-proof">
@@ -1041,7 +1057,7 @@
             </ul>
             <div class="rp-cta-block">
               <div class="risk-line">We only earn when you close. Zero cost to start.</div>
-              <a href="#schedule" class="btn-primary">Schedule Your Discovery Call</a>
+              <a href="https://bit.ly/your-offer_" class="btn-primary" target="_blank" rel="noopener">Discover Your Offer</a>
             </div>
           </div>
         </div>
@@ -1075,7 +1091,7 @@
             </ul>
             <div class="rp-cta-block">
               <div class="risk-line">You keep your existing business. We add to it.</div>
-              <a href="#schedule" class="btn-primary">See How It Works for You</a>
+              <a href="https://bit.ly/your-offer_" class="btn-primary" target="_blank" rel="noopener">Discover Your Offer</a>
             </div>
           </div>
         </div>
@@ -1109,7 +1125,7 @@
             </ul>
             <div class="rp-cta-block">
               <div class="risk-line">You keep the client relationship; we deliver the project behind you.</div>
-              <a href="#schedule" class="btn-primary">Schedule Your Discovery Call</a>
+              <a href="https://bit.ly/your-offer_" class="btn-primary" target="_blank" rel="noopener">Discover Your Offer</a>
             </div>
           </div>
         </div>
@@ -1273,7 +1289,7 @@
         <h4>And the Financing to Make All of It Move</h4>
         <p>Every one of the above can be financed day-one cash-flow-positive for qualified clients. That means your client's first question, "how do we pay for this?" has an answer before they ask it. You never lose a deal to a capital conversation again.</p>
       </div>
-      <a href="#schedule" class="btn-primary">See the Full Platform</a>
+      <a href="https://bit.ly/your-offer_" class="btn-primary" target="_blank" rel="noopener">See the Full Platform</a>
     </div>
   </div>
 </section>
