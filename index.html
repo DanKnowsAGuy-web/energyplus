@@ -904,10 +904,10 @@
         <span class="cycle-wrapper" id="cycleWrapper">
           <span class="cycle-word visible">Energy Pros</span>
           <span class="cycle-word">Solar Installers</span>
-          <span class="cycle-word">HVAC Techs</span>
-          <span class="cycle-word">Lighting Pros</span>
           <span class="cycle-word">Energy Brokers</span>
+          <span class="cycle-word">HVAC Techs</span>
           <span class="cycle-word">Energy Consultants</span>
+          <span class="cycle-word">Lighting Pros</span>
         </span>
       </span>
       <span class="hero-h1-line3" aria-hidden="true">sell one solution.</span>
@@ -1500,7 +1500,9 @@
     function next() {
       if (paused || document.hidden) return;
       const prev = current;
-      current = (current + 1) % words.length;
+      // "Energy Pros" (index 0) is the static floor only: once cycling starts,
+      // loop through the trades (1..end) and never return to it.
+      current = (current >= words.length - 1) ? 1 : current + 1;
       words[prev].classList.remove('visible');          // fade out
       setTimeout(() => words[current].classList.add('visible'), 430); // then fade in (no overlap)
     }
