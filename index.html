@@ -734,13 +734,14 @@
     background: var(--navy-mid);
     border-top: 1px solid var(--border);
     text-align: center; position: relative; overflow: hidden;
-    scroll-margin-top: 4.5rem;
   }
   .cta-section::before {
     content: ''; position: absolute; inset: 0;
     background: radial-gradient(ellipse 55% 65% at 50% 50%, rgba(var(--amber-rgb),0.07) 0%, transparent 62%);
   }
-  .cta-inner { position: relative; z-index: 2; }
+  /* anchor the "Get in touch" jump to the headline, not the padded section top,
+     so you land just above the title with the two options already in view */
+  .cta-inner { position: relative; z-index: 2; scroll-margin-top: 6.5rem; }
   .cta-section .s-label { justify-content: center; }
   .cta-section .s-label::before { display: none; }
   .cta-title {
@@ -1428,8 +1429,8 @@
 <!-- ══════════════════════════════════════════
      CTA
 ════════════════════════════════════════════ -->
-<section class="cta-section" id="schedule">
-  <div class="section-wrap cta-inner">
+<section class="cta-section">
+  <div class="section-wrap cta-inner" id="schedule">
     <div class="reveal">
       <h2 class="cta-title">Let's Scope<br><em>Your First Deal.</em></h2>
       <p class="cta-sub">Two ways in, both straight to Daniel. Pick whichever fits how you work.</p>
