@@ -1594,19 +1594,26 @@
     const photos = Array.from(document.querySelectorAll('.team-photo'));
     if (!photos.length || !touch || reduce) return; // desktop uses hover; reduced-motion stays full colour via CSS
 
-    const BAND = 0.6; // full colour while the photo's centre is within 60% of the half-viewport
     const active = new Set();
     let raf = null;
 
+    // Drive colour by the image's TOP edge so the change reads while scrolling:
+    //   top below the middle  -> black & white (B&W)
+    //   top from middle up to near the header -> B&W fades to full colour
+    //   top scrolling off the top -> full colour fades back to B&W
     function update() {
       raf = null;
-      const half = window.innerHeight / 2;
+      const vh = window.innerHeight;
+      const mid = vh * 0.5;       // "halfway point" of the scroll
+      const topRef = vh * 0.10;   // full colour once the top reaches near the header
+      const exitRef = -vh * 0.25; // back to B&W as the image leaves the top
       active.forEach((p) => {
-        const r = p.getBoundingClientRect();
-        const centre = r.top + r.height / 2;
-        const dist = Math.min(1, Math.abs(centre - half) / half); // 0 centred, 1 at edge
-        let g = (dist - BAND) / (1 - BAND);
-        g = Math.max(0, Math.min(1, g));
+        const top = p.getBoundingClientRect().top;
+        let g;
+        if (top >= mid) g = 1;
+        else if (top >= topRef) g = (top - topRef) / (mid - topRef);      // 1 -> 0
+        else if (top >= exitRef) g = (topRef - top) / (topRef - exitRef); // 0 -> 1
+        else g = 1;
         p.style.setProperty('--g', g.toFixed(3));
       });
     }
