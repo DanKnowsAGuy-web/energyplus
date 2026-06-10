@@ -146,6 +146,16 @@
     background-size: 72px 72px;
     mask-image: radial-gradient(ellipse 65% 65% at 72% 38%, black 0%, transparent 68%);
   }
+  /* a soft probe light that follows the cursor over the hero grid (pointer devices) */
+  .hero-probe {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0;
+    background: radial-gradient(220px circle at var(--mx, 70%) var(--my, 35%),
+      rgba(var(--amber-rgb), 0.12), transparent 60%);
+    transition: opacity 0.5s var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .hero:hover .hero-probe { opacity: 1; }
+  }
   .hero-inner {
     position: relative; z-index: 2;
     max-width: 820px;
@@ -253,12 +263,22 @@
     text-transform: uppercase; color: var(--navy);
     background: var(--amber); padding: 0.95rem 2.2rem;
     text-decoration: none; display: inline-block;
+    position: relative; overflow: hidden; isolation: isolate;
     transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
   }
+  /* brushed-brass sheen sweep on hover */
+  .btn-primary::after {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.45) 50%, transparent 62%);
+    transform: translateX(-130%); pointer-events: none;
+    transition: transform 0.6s var(--ease-out);
+  }
+  .btn-primary:hover::after { transform: translateX(130%); }
   .btn-primary:hover {
     background: var(--amber-light); transform: translateY(-2px);
     box-shadow: 0 8px 28px rgba(var(--amber-rgb),0.28);
   }
+  @media (prefers-reduced-motion: reduce) { .btn-primary::after { display: none; } }
   .btn-ghost {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 0.85rem; font-weight: 700; letter-spacing: 0.14em;
@@ -600,6 +620,55 @@
     max-width: 60ch; text-wrap: pretty;
   }
 
+  /* schematic divider: a hairline baseline with instrument tick marks */
+  .tick-rule {
+    position: relative; height: 9px; width: 100%;
+    border-bottom: 1px solid var(--border-sub);
+    margin-bottom: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  }
+  .tick-rule::before {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 6px;
+    background: repeating-linear-gradient(90deg, var(--border) 0 1px, transparent 1px 30px);
+  }
+
+  /* ── POWER-QUALITY WAVEFORM (the instrument) ── */
+  .pq {
+    display: grid; grid-template-columns: 1.25fr 1fr;
+    gap: clamp(1.5rem, 1rem + 2vw, 3.25rem); align-items: center;
+    background: linear-gradient(155deg, var(--navy-card), var(--navy-deep));
+    border: 1px solid var(--border-sub); border-radius: 18px;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.6rem);
+    margin-bottom: 2.5rem;
+  }
+  .pq__viz { position: relative; }
+  .pq__svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .pq__axis { stroke: var(--border-sub); stroke-width: 1; }
+  .pq__wave {
+    fill: none; stroke: var(--amber); stroke-width: 2.5;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .pq__readout { position: absolute; top: 0; right: 0; display: flex; flex-direction: column; text-align: right; }
+  .pq__pf {
+    font-family: 'Spectral', serif; font-weight: 300; font-size: clamp(2rem, 1.4rem + 2vw, 2.8rem);
+    color: var(--white); line-height: 1; font-variant-numeric: tabular-nums lining-nums;
+  }
+  .pq__pflabel { color: var(--muted); margin-top: 0.25rem; font-size: 0.6rem; }
+  .pq__text .s-label { margin-bottom: 0.9rem; }
+  .pq__title {
+    font-family: 'Spectral', serif; font-weight: 300; font-size: var(--t-h3); color: var(--white);
+    letter-spacing: -0.01em; line-height: var(--lh-snug); text-wrap: balance; margin-bottom: 0.8rem;
+  }
+  .pq__body { font-size: var(--t-sm); color: var(--muted); line-height: var(--lh-body); margin-bottom: 1.5rem; max-width: 46ch; }
+  .pq__toggle { display: inline-flex; border: 1px solid var(--border-sub); border-radius: 999px; padding: 3px; gap: 2px; }
+  .pq__btn {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.74rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    background: transparent; border: 0; border-radius: 999px; padding: 0.5rem 1.05rem; cursor: pointer;
+    min-height: 40px; transition: color 0.2s, background 0.2s;
+  }
+  .pq__btn:hover { color: var(--cream); }
+  .pq__btn[aria-pressed="true"] { background: var(--amber); color: var(--navy); }
+
   /* ── PROCESS ── */
   .process-section {
     padding: var(--section-tight) 0;
@@ -868,6 +937,7 @@
     .role-panel-grid { grid-template-columns: 1fr; }
     .offer-stack { grid-template-columns: repeat(2, 1fr); }
     .offer-header { grid-template-columns: 1fr; gap: 1.5rem; }
+    .pq { grid-template-columns: 1fr; gap: 1.75rem; }
     .steps { grid-template-columns: 1fr; gap: 2.5rem; }
     .steps::before { display: none; }
     .team-grid { grid-template-columns: repeat(2, 1fr); }
@@ -908,6 +978,7 @@
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
+  <div class="hero-probe" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="eyebrow">Your Energy Partner</div>
 
@@ -1235,6 +1306,7 @@
 ════════════════════════════════════════════ -->
 <section class="offer-section" id="offer">
   <div class="section-wrap">
+    <div class="tick-rule" aria-hidden="true"></div>
     <div class="offer-header reveal">
       <div>
         <div class="s-label">What's in the Stack</div>
@@ -1245,6 +1317,29 @@
         <strong>When you partner with us, you represent all of this.</strong> You don't have to know everything.
         You just have to know who to call. We're the call.
       </p>
+    </div>
+
+    <!-- Power-quality proof: the waveform resolves from distorted to clean -->
+    <div class="pq reveal">
+      <div class="pq__viz">
+        <svg class="pq__svg" viewBox="0 0 640 180" aria-hidden="true">
+          <line class="pq__axis" x1="10" y1="90" x2="630" y2="90"/>
+          <path class="pq__wave" d="M10 90 L630 90"/>
+        </svg>
+        <div class="pq__readout">
+          <span class="pq__pf" data-pf>0.82</span>
+          <span class="pq__pflabel mono">Power factor</span>
+        </div>
+      </div>
+      <div class="pq__text">
+        <div class="s-label">Power Quality &amp; Harmonic Filtration</div>
+        <h3 class="pq__title">You can't fix the power you can't see.</h3>
+        <p class="pq__body">Most commercial buildings run on dirty power: harmonic distortion that wastes energy, overheats equipment, and shortens its life. We measure it, then filter it out. Eight to twenty percent savings, and assets that last five to fifteen years longer.</p>
+        <div class="pq__toggle" role="group" aria-label="Signal view">
+          <button class="pq__btn" data-pq="raw" aria-pressed="true">Raw signal</button>
+          <button class="pq__btn" data-pq="clean" aria-pressed="false">After Energy+</button>
+        </div>
+      </div>
     </div>
 
     <div class="offer-stack stagger">
@@ -1413,6 +1508,7 @@
 ════════════════════════════════════════════ -->
 <section class="compare-section">
   <div class="section-wrap">
+    <div class="tick-rule" aria-hidden="true"></div>
     <div class="compare-center reveal">
       <h2 class="s-title" style="text-align:center;">What You're Leaving Behind.<br><em>What You Stand to Gain.</em></h2>
     </div>
@@ -1634,6 +1730,89 @@
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule, { passive: true });
     schedule();
+  })();
+
+  // ── Power-quality waveform: distorted → clean ──
+  (function () {
+    const root = document.querySelector('.pq');
+    if (!root) return;
+    const wave = root.querySelector('.pq__wave');
+    const pfEl = root.querySelector('[data-pf]');
+    const btns = Array.from(root.querySelectorAll('.pq__btn'));
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const N = 180, x0 = 10, x1 = 630, mid = 90, amp = 46;
+    const w = (Math.PI * 2 * 3.4) / (x1 - x0); // ~3.4 cycles across the width
+    const xs = [], rawY = [], cleanY = [];
+    for (let i = 0; i <= N; i++) {
+      const x = x0 + (x1 - x0) * i / N, p = x - x0;
+      xs.push(x);
+      cleanY.push(mid - amp * Math.sin(w * p));
+      rawY.push(mid - (
+        amp * 0.60 * Math.sin(w * p) +
+        amp * 0.50 * Math.sin(3 * w * p + 1.1) +
+        amp * 0.32 * Math.sin(5 * w * p + 0.4) +
+        amp * 0.16 * Math.sin(9 * w * p + 2.0)
+      ));
+    }
+    const lerp = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+    function render(t) {
+      let d = '';
+      for (let i = 0; i <= N; i++) {
+        const y = rawY[i] + (cleanY[i] - rawY[i]) * t;
+        d += (i ? 'L' : 'M') + xs[i].toFixed(1) + ' ' + y.toFixed(1) + ' ';
+      }
+      wave.setAttribute('d', d.trim());
+      const c = lerp([214, 121, 109], [194, 163, 104], t); // red-ish → champagne
+      wave.style.stroke = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+      pfEl.textContent = (0.82 + 0.15 * t).toFixed(2);
+      btns[0].setAttribute('aria-pressed', String(t < 0.5));
+      btns[1].setAttribute('aria-pressed', String(t >= 0.5));
+    }
+
+    let cur = 0, target = 0, raf = null, userActed = false;
+    function tick() {
+      cur += (target - cur) * 0.07;
+      if (Math.abs(target - cur) < 0.002) { cur = target; render(cur); raf = null; return; }
+      render(cur); raf = requestAnimationFrame(tick);
+    }
+    function animateTo(v) {
+      target = v;
+      if (reduce) { cur = v; render(cur); return; }
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+
+    render(0); // start distorted
+    btns.forEach((b) => b.addEventListener('click', () => { userActed = true; animateTo(b.dataset.pq === 'clean' ? 1 : 0); }));
+
+    if (reduce) {
+      render(1); // reduced motion: show the resolved state; toggle still works instantly
+    } else if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && !userActed) { io.disconnect(); setTimeout(() => { if (!userActed) animateTo(1); }, 1100); }
+        });
+      }, { threshold: 0.55 });
+      io.observe(root);
+    }
+  })();
+
+  // ── Hero probe light follows the cursor (pointer devices only) ──
+  (function () {
+    const hero = document.querySelector('.hero');
+    const probe = hero && hero.querySelector('.hero-probe');
+    if (!probe || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    let raf = null, mx = 70, my = 35;
+    hero.addEventListener('mousemove', (e) => {
+      const r = hero.getBoundingClientRect();
+      mx = ((e.clientX - r.left) / r.width) * 100;
+      my = ((e.clientY - r.top) / r.height) * 100;
+      if (!raf) raf = requestAnimationFrame(() => {
+        raf = null;
+        probe.style.setProperty('--mx', mx.toFixed(1) + '%');
+        probe.style.setProperty('--my', my.toFixed(1) + '%');
+      });
+    }, { passive: true });
   })();
 
   // ── For operators reading the source ──
